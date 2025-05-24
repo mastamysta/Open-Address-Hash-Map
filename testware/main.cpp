@@ -1,7 +1,8 @@
+#include <gtest/gtest.h>
+
 #include "open_addr_map.hpp"
 
-
-auto main(int argc, const char *argv[]) -> int
+TEST(DemoTestSuite, SomeTestCase)
 {
-    return 0;
+    ASSERT_TRUE(true);
 }

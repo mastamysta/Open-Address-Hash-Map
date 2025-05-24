@@ -3,3 +3,4 @@ project(open_address_map)
 
 add_subdirectory(src)
 add_subdirectory(testware)
+add_subdirectory(extern/googletest)
