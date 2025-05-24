@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <array>
 #include <iostream>
+#include <functional>
 
 template <typename K, typename V, uint32_t S>
 class OpenAddressMap
@@ -111,12 +112,7 @@ private:
 
     auto get_hash(uint32_t attempt, const key_type& k) const -> index_type
     {
-        return (hash_key(k) + attempt) % S;
-    }
-
-    auto hash_key(const key_type& k) const -> index_type
-    {
-        return 0;
+        return (std::hash<key_type>{}(k) + attempt) % S;
     }
 
 };

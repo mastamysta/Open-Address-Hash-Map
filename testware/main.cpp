@@ -20,6 +20,21 @@ TEST_F(OpenAddressMapFixture, OccupancyOne)
     ASSERT_EQ(map.occupancy(), 1);
 }
 
+TEST_F(OpenAddressMapFixture, OccupancyOneReassign)
+{
+    map[10] = 10;
+    ASSERT_EQ(map.occupancy(), 1);
+}
+
+TEST_F(OpenAddressMapFixture, Occupancy)
+{
+    for (int i = 0; i < map.size(); i++)
+    {
+        map[i] = i;
+        ASSERT_EQ(map.occupancy(), i+1);
+    }
+}
+
 TEST_F(OpenAddressMapFixture, OccupancyToZero)
 {
     map[10] = 5;
