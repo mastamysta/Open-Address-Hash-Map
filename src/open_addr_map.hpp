@@ -18,9 +18,12 @@ public:
 
         if (index == -1)
         {
+            if (_occupancy == S)
+                throw std::runtime_error("No space!");
+
             // This is an insertion.
             index = linear_probe_find_insert(key);
-            occupancy++;
+            _occupancy++;
             key_store[index] = key;
             used[index] = true;
             deleted[index] = false;
@@ -39,21 +42,25 @@ public:
         return value_store[index];
     }
 
-    auto remove(key_type key) -> bool
+    auto remove(key_type key) -> void
     {
         index_type index = linear_probe_search(key);
 
         if (index == -1)
-            return false;
+            throw std::runtime_error("Couldn't find key.");
 
-        occupancy--;
+        _occupancy--;
         deleted[index] = true;
-        return true;
     }
 
-    auto get_occupancy() const -> const index_type&
+    auto size() const -> const index_type
     {
-        return occupancy;
+        return S;
+    }
+
+    auto occupancy() const -> const index_type&
+    {
+        return _occupancy;
     }
 
 private:
@@ -61,7 +68,7 @@ private:
     std::array<bool, S> deleted{};
     std::array<key_type, S> key_store{};
     std::array<key_type, S> value_store{};
-    index_type occupancy = 0;
+    index_type _occupancy = 0;
     
     auto linear_probe_find_insert(const key_type& k) const -> index_type
     {
@@ -70,16 +77,12 @@ private:
 
         while (true)
         {
-            if (attempt >= S)
-                return -1;
-
             index = get_hash(attempt, k);
 
             if (!used[index] || deleted[index])
                 return index;
 
             attempt++;
-
         }
     }
 
@@ -90,6 +93,9 @@ private:
 
         while (true)
         {
+            if (attempt == S)
+                return -1;
+
             index = get_hash(attempt, k);
 
             if (!used[index])

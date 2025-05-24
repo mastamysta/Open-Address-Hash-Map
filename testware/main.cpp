@@ -17,18 +17,26 @@ TEST_F(OpenAddressMapFixture, CanInsertAndRetreive)
 TEST_F(OpenAddressMapFixture, OccupancyOne)
 {
     map[10] = 5;
-    ASSERT_EQ(map.get_occupancy(), 1);
+    ASSERT_EQ(map.occupancy(), 1);
 }
-
 
 TEST_F(OpenAddressMapFixture, OccupancyToZero)
 {
     map[10] = 5;
     map.remove(10);
-    ASSERT_EQ(map.get_occupancy(), 0);
+    ASSERT_EQ(map.occupancy(), 0);
 }
 
 TEST_F(OpenAddressMapFixture, CantDeleteNonExistent)
 {
-    ASSERT_FALSE(map.remove(10));
+    EXPECT_THROW( map.remove(10) , std::runtime_error);
+}
+
+TEST_F(OpenAddressMapFixture, NoInfiniteSearchOnInsert)
+{
+    for (int i = 0; i < map.size(); i++)
+    {
+        map[i] = i;
+    }
+    EXPECT_THROW( map[map.size() + 1] = 0 , std::runtime_error);
 }
